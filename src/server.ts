@@ -19,14 +19,14 @@ if (process.env.NODE_ENV === 'development') {
 
 app.use('/api/v1/posts', postRoutes)
 
-const PORT = process.env.PORT || 2027
-const ENV = process.env.NODE_ENV
-
 app.use((req, res, next) => {
   res.status(404).json({ message: 'This route does not exists' })
 })
 
 app.use(globalErrorHandler)
+
+const PORT = process.env.PORT || 2027
+const ENV = process.env.NODE_ENV
 
 app.listen(PORT, () => {
   console.log(`Server is up and running on port ${PORT} in ${ENV} mode.`)
