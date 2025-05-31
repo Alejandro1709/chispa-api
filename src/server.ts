@@ -1,10 +1,13 @@
 import express from 'express'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
+import connectDB from './config/db'
 
 dotenv.config()
 
 const app = express()
+
+connectDB(process.env.MONGO_URI as string)
 
 app.use(express.json())
 
