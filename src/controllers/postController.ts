@@ -49,3 +49,44 @@ export const createPost = async (
     next(error)
   }
 }
+
+export const updatePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const body = createPostSchema.parse(req.body)
+
+    const post = await Post.findByIdAndUpdate(req.params.id, body, {
+      runValidators: true,
+      new: true,
+    })
+
+    if (!post) {
+      return next(new Error('This post does not exists'))
+    }
+
+    res.status(200).json(post)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const deletePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const post = await Post.findByIdAndUpdate(req.params.id)
+
+    if (!post) {
+      return next(new Error('This post does not exists'))
+    }
+
+    res.status(204).json({ message: 'Post removed!' })
+  } catch (error) {
+    next(error)
+  }
+}
