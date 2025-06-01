@@ -1,11 +1,21 @@
 import type { NextFunction, Request, Response } from 'express'
 import catchAsync from '../utils/catchAsync'
-import { createUserSchema } from '../schemas/userSchema'
+import { createUserSchema, loginUserSchema } from '../schemas/userSchema'
 import User from '../models/User'
 import AppError from '../utils/AppError'
 
 export const login = catchAsync(
-  async (re: Request, res: Response, next: NextFunction) => {}
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = loginUserSchema.parse(req.body)
+
+    const user = await User.findOne({ email }).select('+password')
+
+    if (!user || !(await user.comparePasswords(password, user.password))) {
+      return next(new AppError('Invalid Credentials', 401))
+    }
+
+    res.status(200).json({ message: 'Ok' })
+  }
 )
 
 export const register = catchAsync(

@@ -12,3 +12,12 @@ export const createUserSchema = z.object({
 })
 
 export type CreateUserInput = z.TypeOf<typeof createUserSchema>
+
+export const loginUserSchema = z.object({
+  email: z
+    .string({ required_error: 'Provide an email' })
+    .email({ message: 'Provide a valid email address' }),
+  password: z.string({ required_error: 'Provide a password' }).min(1),
+})
+
+export type LoginUserInput = z.TypeOf<typeof loginUserSchema>
