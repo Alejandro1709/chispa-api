@@ -3,6 +3,7 @@ import morgan from 'morgan'
 import dotenv from 'dotenv'
 import postRoutes from './routes/postRoutes'
 import authRoutes from './routes/authRoutes'
+import userRoutes from './routes/userRoutes'
 import connectDB from './config/db'
 import { globalErrorHandler } from './middlewares/error'
 import AppError from './utils/AppError'
@@ -20,6 +21,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/users', userRoutes)
 app.use('/api/v1/posts', postRoutes)
 
 app.use((req, res, next) => {
