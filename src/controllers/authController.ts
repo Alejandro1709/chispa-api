@@ -3,6 +3,7 @@ import catchAsync from '../utils/catchAsync'
 import { createUserSchema, loginUserSchema } from '../schemas/userSchema'
 import User from '../models/User'
 import AppError from '../utils/AppError'
+import { generateJWTToken } from '../utils/auth'
 
 export const login = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -14,7 +15,9 @@ export const login = catchAsync(
       return next(new AppError('Invalid Credentials', 401))
     }
 
-    res.status(200).json({ message: 'Ok' })
+    const token = generateJWTToken({ id: user._id })
+
+    res.status(200).json({ token })
   }
 )
 
