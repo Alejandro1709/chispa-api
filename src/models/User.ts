@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema<IUserDocument>(
       type: String,
       required: true,
       minlength: 7,
+      select: false,
     },
   },
   {
