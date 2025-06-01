@@ -8,6 +8,7 @@ import type {
 import * as z from 'zod'
 import AppError from '../utils/AppError'
 import { MongooseError } from 'mongoose'
+import { JsonWebTokenError, TokenExpiredError } from 'jsonwebtoken'
 
 const handleMongoCastError = (res: Response, err: any) => {
   const message = `Invalid ${err.path}: ${err.value}`
@@ -32,6 +33,16 @@ const handleMongoDuplicateFieldsError = (res: Response, err: MongooseError) => {
   const message = `Duplicate field value: ${value}. Please use another value`
 
   return res.status(400).json({ message })
+}
+
+const handleJWTTokenError = (res: Response, err: JsonWebTokenError) => {
+  return res.status(401).json({ message: 'Invalid Token. Please log in again' })
+}
+
+const handleJWTTokenExpiredError = (res: Response, err: TokenExpiredError) => {
+  return res
+    .status(401)
+    .json({ message: 'Your token has expired! Please log in again' })
 }
 
 export const globalErrorHandler: ErrorRequestHandler = (
@@ -59,6 +70,16 @@ export const globalErrorHandler: ErrorRequestHandler = (
 
   if (err.code === 11000) {
     handleMongoDuplicateFieldsError(res, err)
+    return
+  }
+
+  if (err.name === 'JsonWebTokenError') {
+    handleJWTTokenError(res, err)
+    return
+  }
+
+  if (err.name === 'TokenExpiredError') {
+    handleJWTTokenExpiredError(res, err)
     return
   }
 
