@@ -18,9 +18,7 @@ export const register = catchAsync(
       return next(new AppError('This email is already taken', 409))
     }
 
-    const user = await User.create(body)
-
-    console.log(user)
+    await User.create(body)
 
     res.status(201).json({ message: 'User created!' })
   }
