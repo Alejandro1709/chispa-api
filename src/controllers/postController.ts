@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import Post from '../models/Post'
 import { createPostSchema } from '../schemas/postSchema'
 import catchAsync from '../utils/catchAsync'
+import AppError from '../utils/AppError'
 
 export const getPosts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -16,7 +17,7 @@ export const getPost = catchAsync(
     const post = await Post.findById(req.params.id)
 
     if (!post) {
-      return next(new Error('This post does not exists'))
+      return next(new AppError('This post does not exists', 404))
     }
 
     res.status(200).json(post)
@@ -43,7 +44,7 @@ export const updatePost = catchAsync(
     })
 
     if (!post) {
-      return next(new Error('This post does not exists'))
+      return next(new AppError('This post does not exists', 404))
     }
 
     res.status(200).json(post)
@@ -55,7 +56,7 @@ export const deletePost = catchAsync(
     const post = await Post.findByIdAndUpdate(req.params.id)
 
     if (!post) {
-      return next(new Error('This post does not exists'))
+      return next(new AppError('This post does not exists', 404))
     }
 
     res.status(204).json({ message: 'Post removed!' })
