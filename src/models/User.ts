@@ -1,12 +1,14 @@
 import mongoose from 'mongoose'
 import slugify from 'slugify'
 import bcrypt from 'bcrypt'
+import { IPostDocument } from './Post'
 
 export interface IUserDocument extends mongoose.Document {
   name: string
   username: string
   email: string
   password: string
+  posts: IPostDocument[]
   comparePasswords: (
     enteredPassword: string,
     hashedPassword: string
@@ -38,6 +40,12 @@ const userSchema = new mongoose.Schema<IUserDocument>(
       minlength: 7,
       select: false,
     },
+    posts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Post',
+      },
+    ],
   },
   {
     timestamps: true,

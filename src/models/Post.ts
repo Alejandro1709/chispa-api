@@ -1,7 +1,9 @@
 import mongoose from 'mongoose'
+import { IUserDocument } from './User'
 
 export interface IPostDocument extends mongoose.Document {
   content: string
+  user: IUserDocument
 }
 
 const postSchema = new mongoose.Schema<IPostDocument>(
@@ -10,6 +12,10 @@ const postSchema = new mongoose.Schema<IPostDocument>(
       type: String,
       required: true,
       trim: true,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
   },
   {
