@@ -5,6 +5,7 @@ import postRoutes from './routes/postRoutes'
 import authRoutes from './routes/authRoutes'
 import userRoutes from './routes/userRoutes'
 import connectDB from './config/db'
+import cors from 'cors'
 import { globalErrorHandler } from './middlewares/error'
 import AppError from './utils/AppError'
 
@@ -15,6 +16,7 @@ const app = express()
 connectDB(process.env.MONGO_URI as string)
 
 app.use(express.json())
+app.use(cors())
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
